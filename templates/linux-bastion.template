@@ -214,8 +214,8 @@ Parameters:
     Description: ID of the VPC (e.g., vpc-0343606e).
     Type: 'AWS::EC2::VPC::Id'
   AlternativeInitializationScript:
-    AllowedPattern: ^http.*|^$
-    ConstraintDescription: URL must begin with http.
+    AllowedPattern: ^https.*|^$
+    ConstraintDescription: URL must begin with https.
     Description: An alternative initialization script to run during setup.
     Default: ''
     Type: String
@@ -470,11 +470,10 @@ Resources:
           - Effect: Allow
             Action:
               - 'ec2:AssociateAddress'
-            Resource:
-              - !Sub "arn:${AWS::Partition}:ec2:${AWS::Region}:${AWS::AccountId}:eip/${EIP1.AllocationId}"
-              - !If [2BastionCondition, !Sub "arn:${AWS::Partition}:ec2:${AWS::Region}:${AWS::AccountId}:eip/${EIP2.AllocationId}", !Ref AWS::NoValue]
-              - !If [3BastionCondition, !Sub "arn:${AWS::Partition}:ec2:${AWS::Region}:${AWS::AccountId}:eip/${EIP3.AllocationId}", !Ref AWS::NoValue]
-              - !If [4BastionCondition, !Sub "arn:${AWS::Partition}:ec2:${AWS::Region}:${AWS::AccountId}:eip/${EIP4.AllocationId}", !Ref AWS::NoValue]
+            Resource: '*'
+            Condition:
+              StringEquals:
+                ec2:ResourceTag/aws:cloudformation:stack-id: !Ref AWS::StackId
       Roles:
         - !If
           - CreateIAMRole
