@@ -46,7 +46,7 @@ function setup_environment_variables() {
 
     LOCAL_IP_ADDRESS=$(imds_request meta-data/network/interfaces/macs/${ETH0_MAC}/local-ipv4s/)
 
-    CWG=$(grep CLOUDWATCHGROUP ${_userdata_file} | sed 's/CLOUDWATCHGROUP=//g')
+    CWG=$(grep CLOUDWATCHGROUP ${_userdata_file} | sed -e 's/CLOUDWATCHGROUP=//g' -e 's/\"//g')
 
 
     export REGION ETH0_MAC EIP_LIST CWG LOCAL_IP_ADDRESS INSTANCE_ID
@@ -171,7 +171,6 @@ function setup_os () {
 
     if [[ "${release}" == "CentOS" ]]; then
         /sbin/restorecon -v /etc/ssh/sshd_config
-        systemctl restart sshd
     fi
 
     if [[ "${release}" == "SLES" ]]; then
@@ -185,7 +184,7 @@ function setup_os () {
 
     crontab ~/mycron
     rm ~/mycron
-
+    systemctl restart sshd
     echo "${FUNCNAME[0]} Ended"
 }
 
