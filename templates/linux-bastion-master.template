@@ -87,6 +87,7 @@ Metadata:
 Parameters:
   AvailabilityZones:
     Description: List of Availability Zones to use for the subnets in the VPC.
+    Default: us-east-1a, us-east-1b, us-east-1c
     Type: 'List<AWS::EC2::AvailabilityZone::Name>'
   BastionAMIOS:
     AllowedValues:
@@ -167,6 +168,7 @@ Parameters:
   KeyPairName:
     Description: Name of an existing public/private key pair, which allows you to securely connect to your instance
       after it launches.
+    Default: testCNF
     Type: 'AWS::EC2::KeyPair::KeyName'
   NumBastionHosts:
     AllowedValues:
@@ -245,6 +247,7 @@ Parameters:
   RemoteAccessCIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/x
+    Default: 0.0.0.0/0
     Description: Allowed CIDR block for external SSH access to the bastions
     Type: String
   VPCCIDR:
@@ -319,7 +322,3 @@ Resources:
         VPCID: !GetAtt 
           - VPCStack
           - Outputs.VPCID
-Outputs:
-  Postdeployment:
-    Description: See the deployment guide for post-deployment steps.
-    Value: https://aws.amazon.com/quickstart/?quickstart-all.sort-by=item.additionalFields.sortDate&quickstart-all.sort-order=desc&awsm.page-quickstart-all=5
